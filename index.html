@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Book a Club Crawl | Supreme Club Tours Las Vegas & Miami</title>
+<meta name="description" content="Book a Supreme Club Tours club crawl in Las Vegas or Miami. Pick your night, fill out the form, and text to reserve. Party bus, free drinks, skip the line.">
+<meta name="theme-color" content="#1E1234">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Figtree:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --plum:#1E1234; --plum-2:#2C1B4A; --plum-3:#3D2862;
+  --stock:#F3EEFF; --ink:#1E1234; --muted:#6E5F8C;
+  --hot:#FF2E93; --gold:#FFC83D;
+  --display:"Bungee", "Arial Black", Impact, sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--plum);color:var(--stock);font:16px/1.5 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button,input,select,textarea{font:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px}
+
+/* Header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--plum);border-bottom:1px solid var(--plum-3)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
+.logo{font-family:var(--display);font-size:22px;letter-spacing:.02em;text-decoration:none;line-height:1}
+.logo small{display:block;font:600 11px/1.2 var(--body);color:var(--gold);letter-spacing:.04em;margin-top:3px}
+.cities{display:flex;background:var(--plum-2);border-radius:999px;padding:4px}
+.cities button{border:0;background:none;color:var(--stock);padding:8px 14px;border-radius:999px;font-weight:600;cursor:pointer;font-size:14px}
+.cities button[aria-pressed="true"]{background:var(--hot);color:#fff}
+
+/* Hero */
+.hero{padding:34px 0 18px}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(34px,9vw,58px);line-height:.95;margin:0 0 14px;color:var(--gold);text-shadow:4px 4px 0 var(--hot)}
+.hero p{margin:0;max-width:52ch;color:#D9CDF2}
+
+/* Date strip */
+.dates{display:flex;gap:8px;overflow-x:auto;padding:16px 0 18px;scrollbar-width:none;scroll-snap-type:x proximity}
+.dates::-webkit-scrollbar{display:none}
+.date{flex:0 0 auto;width:62px;border:2px solid var(--plum-3);background:transparent;color:var(--stock);border-radius:14px;padding:8px 0 9px;cursor:pointer;scroll-snap-align:start;text-align:center}
+.date b{display:block;font-family:var(--display);font-weight:400;font-size:24px;line-height:1.1}
+.date span{font-size:12px;font-weight:600;color:#BBA9DD}
+.date em{display:block;font-style:normal;font-size:11px;color:var(--gold);height:14px}
+.date[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.date[aria-pressed="true"] span,.date[aria-pressed="true"] em{color:var(--ink)}
+
+/* Ticket blocks */
+.day-head{font-weight:800;font-size:18px;margin:4px 0 12px}
+.tickets{display:grid;gap:14px;padding-bottom:30px}
+.ticket{display:grid;grid-template-columns:96px 1fr;background:var(--stock);color:var(--ink);border-radius:16px;position:relative;overflow:hidden}
+.stub{background:var(--hot);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 6px;position:relative;text-align:center}
+.stub::after{content:"";position:absolute;right:-1px;top:10px;bottom:10px;border-right:3px dotted var(--stock)}
+.stub .dow{font-weight:800;font-size:13px}
+.stub .num{font-family:var(--display);font-size:40px;line-height:1}
+.stub .mon{font-weight:600;font-size:13px}
+.ticket.day .stub{background:#FF8A00}
+.ticket.yacht .stub{background:#2E7BFF}
+.body{padding:16px 18px 18px}
+.body h3{margin:0 0 2px;font-size:20px;line-height:1.2;font-weight:800}
+.when{font-size:14px;color:var(--muted);margin:0 0 10px}
+.perks{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px;padding:0;list-style:none}
+.perks li{font-size:13px;font-weight:600;background:#E2D9F6;border-radius:6px;padding:3px 8px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.price{font-weight:800;font-size:22px}
+.price small{font-weight:500;font-size:13px;color:var(--muted)}
+.btn{border:0;cursor:pointer;background:var(--ink);color:var(--gold);font-weight:800;padding:12px 18px;border-radius:12px;font-size:15px}
+.btn:hover{background:var(--plum-3)}
+.flag{font-size:12px;color:var(--muted);margin-top:8px}
+.empty{background:var(--plum-2);border-radius:16px;padding:22px;color:#D9CDF2}
+
+/* Booking sheet */
+dialog{border:0;padding:0;width:min(560px,100%);max-height:100%;margin:auto auto 0;border-radius:22px 22px 0 0;background:var(--stock);color:var(--ink)}
+@media (min-width:640px){dialog{margin:auto;border-radius:22px}}
+dialog::backdrop{background:rgba(20,10,35,.72)}
+.sheet{padding:22px 20px calc(22px + env(safe-area-inset-bottom,0px))}
+.sheet-top{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:14px}
+.sheet h2{margin:0;font-size:22px;line-height:1.2}
+.sheet .sub{margin:2px 0 0;color:var(--muted);font-size:14px}
+.x{border:0;background:#E2D9F6;width:38px;height:38px;border-radius:50%;font-size:22px;line-height:1;cursor:pointer;flex:0 0 auto}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.full{grid-column:1/-1}
+label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+input,select,textarea{width:100%;border:2px solid #CFC2EA;background:#fff;border-radius:10px;padding:10px 12px;color:var(--ink)}
+input:focus,select:focus,textarea:focus{border-color:var(--hot);outline:none}
+textarea{min-height:70px;resize:vertical}
+.err{color:#C4005C;font-size:13px;font-weight:600;min-height:18px;margin:10px 0 0}
+.send{width:100%;margin-top:6px;background:var(--hot);color:#fff;font-size:17px;padding:15px}
+.send:hover{background:#E0207D}
+.fine{font-size:12px;color:var(--muted);margin:10px 0 0;text-align:center}
+.done{text-align:center;padding:8px 0}
+.done h2{margin-bottom:8px}
+.done p{color:var(--muted);margin:0 0 14px}
+.msg{white-space:pre-wrap;text-align:left;background:#fff;border:2px dashed #CFC2EA;border-radius:12px;padding:12px;font-size:14px;margin:0 0 12px}
+.alt{display:flex;gap:10px}
+.alt .btn{flex:1;text-align:center;text-decoration:none}
+.ghost{background:#E2D9F6;color:var(--ink)}
+.ghost:hover{background:#D3C7EF}
+
+.dress{background:var(--plum-2);border-radius:16px;padding:20px 20px 8px;margin:0 0 34px}
+.dress h2{font-family:var(--display);font-weight:400;font-size:22px;color:var(--gold);margin:0 0 6px}
+.dress > p{margin:0 0 14px;color:#D9CDF2}
+.dress .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:560px){.dress .cols{grid-template-columns:1fr}}
+.dress h3{font-size:16px;margin:0 0 6px}
+.dress ul{margin:0 0 12px;padding-left:18px;font-size:15px}
+.dress li{margin-bottom:3px}
+.dress .no{color:#FFB3D4}
+.agree{display:flex;gap:10px;align-items:flex-start;font-size:14px;font-weight:500;margin-top:4px}
+.agree input{width:20px;height:20px;flex:0 0 auto;margin-top:1px;accent-color:var(--hot)}
+footer{border-top:1px solid var(--plum-3);padding:22px 0 40px;font-size:14px;color:#BBA9DD}
+footer p{margin:0 0 8px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="https://www.supremeclubtours.com" aria-label="Supreme Club Tours home">SUPREME<small>Club Tours</small></a>
+    <div class="cities" role="group" aria-label="Choose city">
+      <button type="button" data-city="vegas" aria-pressed="true">Las Vegas</button>
+      <button type="button" data-city="miami" aria-pressed="false">Miami</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1 id="heroTitle">Party bus.<br>Free drinks.<br>No lines.</h1>
+    <p id="heroSub">Pick your night, choose a crawl, and text us your reservation. We confirm every booking by text.</p>
+  </section>
+
+  <nav class="dates" id="dates" aria-label="Choose a night"></nav>
+  <h2 class="day-head" id="dayHead"></h2>
+  <section class="tickets" id="tickets" aria-live="polite"></section>
+
+  <section class="dress" id="dresscode" aria-labelledby="dressTitle">
+    <h2 id="dressTitle">Nightclub dress code</h2>
+    <p>Every guest must be in nightclub dress code. Clubs will turn away anyone who isn't, and tickets are not refunded at the door.</p>
+    <div class="cols">
+      <div>
+        <h3>Guys</h3>
+        <ul>
+          <li>Collared shirt, button-up, or clean fitted top</li>
+          <li>Dark jeans (no rips) or dress pants</li>
+          <li>Dress shoes or clean sneakers. Jordans are fine.</li>
+        </ul>
+        <ul class="no">
+          <li>No shorts, tank tops, or athletic wear</li>
+          <li>No hats, jerseys, or ripped jeans</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Ladies</h3>
+        <ul>
+          <li>Dresses, skirts, or dressy going-out outfits</li>
+          <li>Heels, dressy flats, or sandals with straps</li>
+        </ul>
+        <ul class="no">
+          <li>No flip flops or athletic wear</li>
+          <li>No jean shorts or large purses</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Nightclub <a href="#dresscode">dress code</a> enforced. Venues are subject to change.</p>
+    <p>Questions? Text <a id="footPhone" href="#"></a>.</p>
+    <p id="syncNote"></p>
+  </div>
+</footer>
+
+<dialog id="sheet" aria-labelledby="sheetTitle">
+  <div class="sheet">
+    <form id="form" novalidate>
+      <div class="sheet-top">
+        <div>
+          <h2 id="sheetTitle"></h2>
+          <p class="sub" id="sheetSub"></p>
+        </div>
+        <button type="button" class="x" data-close aria-label="Close">×</button>
+      </div>
+      <div class="grid">
+        <div class="full">
+          <label for="fDate">Night</label>
+          <select id="fDate" required></select>
+        </div>
+        <div class="full">
+          <label for="fName">Full name</label>
+          <input id="fName" autocomplete="name" required>
+        </div>
+        <div>
+          <label for="fLadies">Ladies</label>
+          <input id="fLadies" type="number" inputmode="numeric" min="0" max="99" value="0">
+        </div>
+        <div>
+          <label for="fGuys">Guys</label>
+          <input id="fGuys" type="number" inputmode="numeric" min="0" max="99" value="0">
+        </div>
+        <div>
+          <label for="fOccasion">Occasion</label>
+          <select id="fOccasion">
+            <option>Just partying</option><option>Birthday</option><option>Bachelorette</option>
+            <option>Bachelor</option><option>Anniversary</option><option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="fPromo">Promo code</label>
+          <input id="fPromo" autocapitalize="characters">
+        </div>
+        <div class="full">
+          <label for="fHotel">Hotel (optional)</label>
+          <input id="fHotel">
+        </div>
+        <div class="full">
+          <label for="fNotes">Anything else? (optional)</label>
+          <textarea id="fNotes"></textarea>
+        </div>
+      </div>
+      <label class="agree"><input type="checkbox" id="fDress"> Everyone in my group will follow the nightclub dress code.</label>
+      <p class="err" id="err" role="alert"></p>
+      <button class="btn send" type="submit">Text to reserve</button>
+      <p class="fine">Opens your Messages app with your reservation filled in. Hit send and we'll text back to confirm your spots.</p>
+    </form>
+
+    <div class="done" id="done" hidden>
+      <div class="sheet-top" style="justify-content:flex-end;margin:0"><button type="button" class="x" data-close aria-label="Close">×</button></div>
+      <h2>Hit send in Messages</h2>
+      <p>Your reservation isn't booked until you send the text and we confirm it.</p>
+      <div class="msg" id="msgPreview"></div>
+      <div class="alt">
+        <a class="btn" id="reopen" href="#">Open Messages</a>
+        <button type="button" class="btn ghost" id="copy">Copy message</button>
+      </div>
+      <p class="fine" id="copyNote">On a computer? Copy the message and text it to <span id="donePhone"></span>.</p>
+    </div>
+  </div>
+</dialog>
+
+<script>
+/* ====== SETTINGS ====== */
+const BOOKING_PHONE = "+17253214517";      // guests text this number
+const PRICE = 50;                           // flat price per person, all-in
+const DAYS_AHEAD = 21;                      // how many nights to show
+const SYNC_URL = "/.netlify/functions/tours";
+
+/* ====== TOUR CATALOG (defaults; live site overrides price/days/listed) ====== */
+const CATALOG = {
+  vegas: {
+    label: "Las Vegas",
+    sub: "Hip hop, EDM, Latin and pool crawls on the Strip. Pick your night, choose a crawl, and text us your reservation.",
+    tours: [
+      { id:"vegas-hiphop-club", name:"Hip Hop Club Crawl", kind:"night", price:50, days:[4,5,6,0], time:"Night",
+        perks:["2 nightclubs","1 hr party bus","Free drinks on the bus","Skip the line"] },
+      { id:"vegas-hiphop-pool", name:"Hip Hop Pool Crawl", kind:"day", price:50, days:[5,6,0], time:"Day",
+        perks:["2 dayclubs","Party bus","Free drinks","Skip the line"] },
+      { id:"vegas-edm-club", name:"EDM Club Crawl", kind:"night", price:50, days:null, time:"Night",
+        perks:["Top EDM clubs","Party bus","Free drinks"] },
+      { id:"vegas-edm-pool", name:"EDM Pool Crawl", kind:"day", price:50, days:null, time:"Day",
+        perks:["EDM dayclubs","Party bus","Free drinks"] },
+      { id:"vegas-latin", name:"Latin Club Crawl", kind:"night", price:50, days:null, time:"Night",
+        perks:["Latin nightclubs","Party bus","Champagne on the bus"] },
+      { id:"vegas-strip", name:"Strip Club Tour", kind:"night", price:50, days:null, time:"Night",
+        perks:["VIP entry","Party bus"] }
+    ]
+  },
+  miami: {
+    label: "Miami",
+    sub: "Yacht parties, hip hop crawls and South Beach nightlife. Pick your night, choose a crawl, and text us your reservation.",
+    tours: [
+      { id:"miami-hiphop-club", name:"Hip Hop Club Crawl", kind:"night", price:50, days:[0,1,2,3,4,5,6], time:"Night",
+        perks:["2 clubs","Party bus","Free drinks","Skip the line"] },
+      { id:"miami-yacht-club", name:"Yacht + Club Crawl", kind:"yacht", price:50, days:[5,6,0], time:"Night",
+        perks:["3 hr yacht party","Free drinks","Free club entry"] },
+      { id:"miami-yacht", name:"Yacht Party", kind:"yacht", price:50, days:[5,6,0], time:"Night",
+        perks:["3 hr yacht party","Free drinks"] },
+      { id:"miami-edm-club", name:"EDM Club Crawl", kind:"night", price:50, days:null, time:"Night",
+        perks:["EDM clubs","Party bus","Free drinks"] },
+      { id:"miami-latin", name:"Latin Club Crawl", kind:"night", price:50, days:null, time:"Night",
+        perks:["Latin clubs","Party bus","Free drinks"] },
+      { id:"miami-strip", name:"Strip Club Crawl", kind:"night", price:50, days:null, time:"Night",
+        perks:["VIP entry","1 hr party bus","Free drinks"] }
+    ]
+  }
+};
+
+/* ====== STATE ====== */
+const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const DOW_LONG = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+let city = (new URLSearchParams(location.search).get("city") === "miami") ? "miami" : "vegas";
+let picked = null;          // Date
+let activeTour = null;
+let lastMessage = "";
+
+const $ = s => document.querySelector(s);
+const prettyPhone = p => p.replace(/^\+1(\d{3})(\d{3})(\d{4})$/, "$1-$2-$3");
+const keyOf = d => d.toISOString().slice(0,10);
+
+function nights() {
+  const out = [], t = new Date(); t.setHours(12,0,0,0);
+  for (let i = 0; i < DAYS_AHEAD; i++) { const d = new Date(t); d.setDate(t.getDate()+i); out.push(d); }
+  return out;
+}
+const tours = () => CATALOG[city].tours.filter(t => t.active !== false);
+const runsOn = (t, d) => !t.days || t.days.includes(d.getDay());
+const toursOn = d => tours().filter(t => runsOn(t, d))
+  .sort((a,b) => (b.days ? 1 : 0) - (a.days ? 1 : 0));
+const fullDate = d => `${DOW_LONG[d.getDay()]}, ${MON[d.getMonth()]} ${d.getDate()}`;
+
+/* ====== RENDER ====== */
+function renderCityButtons() {
+  document.querySelectorAll(".cities button").forEach(b =>
+    b.setAttribute("aria-pressed", String(b.dataset.city === city)));
+  $("#heroSub").textContent = CATALOG[city].sub;
+  document.title = `Book a ${CATALOG[city].label} Club Crawl | Supreme Club Tours`;
+}
+
+function renderDates() {
+  const list = nights();
+  if (!picked || !list.some(d => keyOf(d) === keyOf(picked))) {
+    picked = list.find(d => toursOn(d).some(t => t.days)) || list[0];
+  }
+  const today = keyOf(list[0]);
+  $("#dates").innerHTML = list.map(d => {
+    const k = keyOf(d), on = k === keyOf(picked);
+    const label = k === today ? "Tonight" : "";
+    return `<button type="button" class="date" data-key="${k}" aria-pressed="${on}" aria-label="${fullDate(d)}">
+      <span>${DOW[d.getDay()]}</span><b>${d.getDate()}</b><em>${label}</em></button>`;
+  }).join("");
+  const sel = $(`.date[aria-pressed="true"]`);
+  if (sel) sel.scrollIntoView({ block:"nearest", inline:"center" });
+}
+
+function priceHTML(t) {
+  return `<span class="price">$${PRICE} <small>per person, taxes &amp; fees included</small></span>`;
+}
+
+function renderTickets() {
+  const d = picked;
+  $("#dayHead").textContent = `${CATALOG[city].label}: ${fullDate(d)}`;
+  const list = toursOn(d);
+  if (!list.length) {
+    $("#tickets").innerHTML = `<div class="empty">No crawls are scheduled this night. Pick another date above, or text ${prettyPhone(BOOKING_PHONE)} for a private party bus.</div>`;
+    return;
+  }
+  $("#tickets").innerHTML = list.map(t => `
+    <article class="ticket ${t.kind}">
+      <div class="stub" aria-hidden="true">
+        <span class="dow">${DOW[d.getDay()]}</span><span class="num">${d.getDate()}</span><span class="mon">${MON[d.getMonth()]}</span>
+      </div>
+      <div class="body">
+        <h3>${t.name}</h3>
+        <p class="when">${CATALOG[city].label}, ${t.time.toLowerCase()} crawl</p>
+        <ul class="perks">${t.perks.map(p => `<li>${p}</li>`).join("")}</ul>
+        <div class="row">${priceHTML(t)}
+          <button type="button" class="btn" data-book="${t.id}">Book ${DOW[d.getDay()]} ${MON[d.getMonth()]} ${d.getDate()}</button>
+        </div>
+        ${t.days ? "" : `<p class="flag">Runs on select nights. We'll confirm this date by text.</p>`}
+      </div>
+    </article>`).join("");
+}
+
+function render() { renderCityButtons(); renderDates(); renderTickets(); }
+
+/* ====== BOOKING ====== */
+function openSheet(id) {
+  activeTour = tours().find(t => t.id === id);
+  if (!activeTour) return;
+  $("#form").hidden = false; $("#done").hidden = true; $("#err").textContent = "";
+  $("#sheetTitle").textContent = `${CATALOG[city].label} ${activeTour.name}`;
+  $("#sheetSub").textContent = `$${PRICE} per person, taxes & fees included`;
+  $("#fDate").innerHTML = nights().filter(d => runsOn(activeTour, d))
+    .map(d => `<option value="${keyOf(d)}"${keyOf(d) === keyOf(picked) ? " selected" : ""}>${fullDate(d)}</option>`).join("");
+  $("#sheet").showModal();
+  setTimeout(() => $("#fName").focus(), 50);
+}
+
+function smsHref(body) {
+  const sep = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent) ? "&" : "?";
+  return `sms:${BOOKING_PHONE}${sep}body=${encodeURIComponent(body)}`;
+}
+
+$("#form").addEventListener("submit", e => {
+  e.preventDefault();
+  const name = $("#fName").value.trim();
+  const ladies = Math.max(0, parseInt($("#fLadies").value, 10) || 0);
+  const guys = Math.max(0, parseInt($("#fGuys").value, 10) || 0);
+  if (!name) { $("#err").textContent = "Enter the name the reservation is under."; $("#fName").focus(); return; }
+  if (ladies + guys < 1) { $("#err").textContent = "Add at least one guest in Ladies or Guys."; $("#fLadies").focus(); return; }
+  if (!$("#fDress").checked) { $("#err").textContent = "Confirm your group will follow the nightclub dress code."; $("#fDress").focus(); return; }
+  const [y,m,dd] = $("#fDate").value.split("-").map(Number);
+  const date = new Date(y, m-1, dd, 12);
+  const group = [ladies && `${ladies} ${ladies === 1 ? "lady" : "ladies"}`, guys && `${guys} ${guys === 1 ? "guy" : "guys"}`]
+    .filter(Boolean).join(", ");
+  const lines = [
+    "SUPREME CLUB TOURS RESERVATION",
+    `Tour: ${CATALOG[city].label} ${activeTour.name}`,
+    `Date: ${fullDate(date)}`,
+    `Name: ${name}`,
+    `Group: ${group} (${ladies + guys} total)`,
+    `Total: $${(ladies + guys) * PRICE} ($${PRICE} x ${ladies + guys}, taxes & fees included)`,
+    `Occasion: ${$("#fOccasion").value}`,
+    $("#fHotel").value.trim() && `Hotel: ${$("#fHotel").value.trim()}`,
+    $("#fPromo").value.trim() && `Promo: ${$("#fPromo").value.trim().toUpperCase()}`,
+    $("#fNotes").value.trim() && `Notes: ${$("#fNotes").value.trim()}`,
+    "Dress code: confirmed"
+  ].filter(Boolean);
+  lastMessage = lines.join("\n") + "\n\nPlease confirm my reservation!";
+  const href = smsHref(lastMessage);
+  $("#msgPreview").textContent = lastMessage;
+  $("#reopen").href = href;
+  $("#donePhone").textContent = prettyPhone(BOOKING_PHONE);
+  $("#form").hidden = true; $("#done").hidden = false;
+  window.location.href = href;
+});
+
+$("#copy").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText(lastMessage); $("#copy").textContent = "Copied"; }
+  catch { $("#copy").textContent = "Select and copy above"; }
+  setTimeout(() => $("#copy").textContent = "Copy message", 2500);
+});
+
+/* ====== EVENTS ====== */
+document.addEventListener("click", e => {
+  const c = e.target.closest("[data-city]");
+  if (c && c.dataset.city !== city) {
+    city = c.dataset.city;
+    history.replaceState(null, "", city === "miami" ? "?city=miami" : location.pathname);
+    picked = null; render(); return;
+  }
+  const d = e.target.closest(".date");
+  if (d) { picked = nights().find(n => keyOf(n) === d.dataset.key); renderDates(); renderTickets(); return; }
+  const b = e.target.closest("[data-book]");
+  if (b) { openSheet(b.dataset.book); return; }
+  if (e.target.closest("[data-close]")) $("#sheet").close();
+});
+$("#sheet").addEventListener("click", e => { if (e.target === $("#sheet")) $("#sheet").close(); });
+
+/* ====== LIVE SYNC FROM SUPREMECLUBTOURS.COM ====== */
+async function sync() {
+  try {
+    const r = await fetch(SYNC_URL, { headers: { accept: "application/json" } });
+    if (!r.ok) throw 0;
+    const data = await r.json();
+    let synced = false;
+    for (const [c, info] of Object.entries(data.cities || {})) {
+      if (!info.ok || !CATALOG[c]) continue;
+      synced = true;
+      for (const t of CATALOG[c].tours) {
+        const live = info.tours[t.id];
+        if (!live) continue;
+        t.active = live.active;
+        if (live.days) t.days = live.days;
+      }
+    }
+    if (synced && data.syncedAt) {
+      const s = new Date(data.syncedAt);
+      $("#syncNote").textContent = `Tour lineup synced from supremeclubtours.com on ${MON[s.getMonth()]} ${s.getDate()}.`;
+    }
+    render();
+  } catch { /* offline or local preview: catalog defaults stay */ }
+}
+
+$("#footPhone").textContent = prettyPhone(BOOKING_PHONE);
+$("#footPhone").href = `sms:${BOOKING_PHONE}`;
+render();
+sync();
+</script>
+</body>
+</html>
