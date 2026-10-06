@@ -117,6 +117,11 @@ function renderTickets() {
 
 function render() { renderDates(); renderTickets(); }
 
+/* ====== ANALYTICS ====== */
+function track(name, params) {
+  try { if (typeof gtag === "function") gtag("event", name, params); } catch {}
+}
+
 /* ====== BOOKING ====== */
 function openSheet(id) {
   activeTour = tours().find(t => t.id === id);
@@ -126,6 +131,7 @@ function openSheet(id) {
   $("#sheetSub").textContent = `$${activeTour.price ?? PRICE} per person, taxes & fees included`;
   $("#fDate").innerHTML = nights().filter(d => runsOn(activeTour, d))
     .map(d => `<option value="${keyOf(d)}"${keyOf(d) === keyOf(picked) ? " selected" : ""}>${fullDate(d)}</option>`).join("");
+  track("begin_booking", { city: CATALOG[city].label, tour: activeTour.name });
   $("#sheet").showModal();
   setTimeout(() => $("#fName").focus(), 50);
 }
@@ -166,7 +172,10 @@ $("#form").addEventListener("submit", e => {
   $("#reopen").href = href;
   $("#donePhone").textContent = prettyPhone(BOOKING_PHONE);
   $("#form").hidden = true; $("#done").hidden = false;
-  window.location.href = href;
+  const guests = ladies + guys, price = activeTour.price ?? PRICE;
+  track("generate_lead", { city: CATALOG[city].label, tour: activeTour.name, guests,
+    value: guests * price, currency: "USD", occasion: $("#fOccasion").value });
+  setTimeout(() => { window.location.href = href; }, 300);
 });
 
 $("#copy").addEventListener("click", async () => {
