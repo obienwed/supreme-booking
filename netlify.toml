@@ -8,3 +8,18 @@
   [headers.values]
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# old ?city=miami links go to the Miami page
+[[redirects]]
+  from = "/"
+  to = "/miami/"
+  status = 301
+  query = {city = "miami"}
+  force = true
+
+# netlify.app address points to the real domain
+[[redirects]]
+  from = "https://supremebooking.netlify.app/*"
+  to = "https://lasvegaspartybuscrawl.com/:splat"
+  status = 301
+  force = true
