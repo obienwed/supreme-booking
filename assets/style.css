@@ -124,3 +124,16 @@ footer p{margin:0 0 8px}
 .cta-band{background:var(--hot);color:#fff;border-radius:16px;padding:20px;margin:34px 0;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
 .cta-band p{margin:0;font-weight:700;font-size:18px;color:#fff}
 .cta-band a{background:var(--ink);color:var(--gold);text-decoration:none;font-weight:800;padding:12px 18px;border-radius:12px}
+
+/* landing pages */
+.crumbs{font-size:13px;color:#BBA9DD;margin:16px 0 0}
+.crumbs a{color:#D9CDF2}
+.crumbs span{color:#BBA9DD}
+.links{margin:30px 0 0}
+.links h2{font-family:var(--display);font-weight:400;font-size:24px;line-height:1.15;color:var(--gold);margin:0 0 12px}
+.links ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.links a{display:block;background:var(--plum-2);border:1px solid var(--plum-3);border-radius:12px;padding:14px 16px;color:var(--stock);text-decoration:none;font-weight:700}
+.links a:hover{border-color:var(--gold);color:var(--gold)}
+.content a{color:var(--gold)}
+.footlinks{line-height:1.9}
+.footlinks b{color:var(--stock)}

@@ -62,7 +62,8 @@ function nights() {
   for (let i = 0; i < DAYS_AHEAD; i++) { const d = new Date(t); d.setDate(t.getDate()+i); out.push(d); }
   return out;
 }
-const tours = () => CATALOG[city].tours.filter(t => t.active !== false);
+const ONLY = (document.body.dataset.tours || "").split(",").filter(Boolean);
+const tours = () => CATALOG[city].tours.filter(t => t.active !== false && (!ONLY.length || ONLY.includes(t.id)));
 const runsOn = (t, d) => !t.days || t.days.includes(d.getDay());
 const toursOn = d => tours().filter(t => runsOn(t, d))
   .sort((a,b) => (b.days ? 1 : 0) - (a.days ? 1 : 0));
