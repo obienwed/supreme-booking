@@ -187,6 +187,7 @@ $("#copy").addEventListener("click", async () => {
 
 /* ====== EVENTS ====== */
 document.addEventListener("click", e => {
+  if (e.target.closest('a[href^="sms:"]:not(#reopen)')) track("contact_sms", { city: CATALOG[city].label });
   const d = e.target.closest(".date");
   if (d) { picked = nights().find(n => keyOf(n) === d.dataset.key); renderDates(); renderTickets(); return; }
   const b = e.target.closest("[data-book]");

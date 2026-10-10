@@ -188,7 +188,8 @@ PAGES = [
     "Your group checks in, boards the party bus and gets VIP entry into Las Vegas gentlemen's clubs. Getting a group into the big clubs without paying cover and cab fare at each door is the whole point, and the bus keeps everyone together.",
     "The tour runs on select nights. Book your night and we'll confirm by text with check-in details."]),
    ("Who it's for", [
-    "Mostly [bachelor parties](/las-vegas-bachelor-party/) and birthdays, plus plenty of mixed groups. Ladies are welcome."]),
+    "Mostly [bachelor parties](/las-vegas-bachelor-party/) and birthdays, plus plenty of mixed groups. Ladies are welcome.",
+    "Going without the bus? [Get on the LVSC guest list](https://lasvegasstripclubs.us/) for no cover, a $40 two-drink package and a free ride from your hotel."]),
    ("Rules to know", [
     "Every guest must be 21 or older with a valid government-issued ID. Dress code is smart casual: no athletic wear, jerseys or flip flops. Dances, drinks and tips inside the clubs are paid separately."]),
   ],
@@ -386,12 +387,12 @@ MIAMI_LINKS = [p for p in PAGES if p["city"] == "miami"]
 def inline(text):
     t = html.escape(text, quote=False)
     t = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", t)
-    t = re.sub(r"\[(.+?)\]\((/[^)]*)\)", r'<a href="\2">\1</a>', t)
+    t = re.sub(r"\[(.+?)\]\((/[^)]*|https://[^)]*)\)", r'<a href="\2">\1</a>', t)
     return t
 
 def plain(text):
     t = re.sub(r"\*\*(.+?)\*\*", r"\1", text)
-    return re.sub(r"\[(.+?)\]\((/[^)]*)\)", r"\1", t)
+    return re.sub(r"\[(.+?)\]\((/[^)]*|https://[^)]*)\)", r"\1", t)
 
 def url_of(p):
     return f"{DOMAIN}/{p['slug']}/"
@@ -485,6 +486,7 @@ def page_html(p):
   <section class="hero">
     <h1 id="heroTitle">{html.escape(p["h1"])}</h1>
     <p id="heroSub">{inline(p["lead"])}</p>
+    <a class="hero-cta" href="#dates">Pick your night</a>
     {art_figure(p["slug"])}
   </section>
 
