@@ -224,3 +224,14 @@ $("#footPhone").textContent = prettyPhone(BOOKING_PHONE);
 $("#footPhone").href = `sms:${BOOKING_PHONE}`;
 render();
 sync();
+
+/* ====== CLIPS: load and play only when on screen ====== */
+(() => {
+  const vids = document.querySelectorAll("video[data-src]");
+  if (!vids.length) return;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const start = v => { if (!v.src) v.src = v.dataset.src; if (!reduce) v.play().catch(() => {}); };
+  if (!("IntersectionObserver" in window)) { vids.forEach(start); return; }
+  const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? start(e.target) : e.target.pause()), { rootMargin: "200px" });
+  vids.forEach(v => io.observe(v));
+})();

@@ -335,21 +335,49 @@ ART = {  # page slug -> (illustration, alt text)
     "las-vegas-strip-club-tour": ("party-bus", "Illustration of a party bus on the Las Vegas Strip at night"),
     "las-vegas-party-bus-prices": ("party-bus", "Illustration of a party bus on the Las Vegas Strip at night"),
     "las-vegas-nightclub-dress-code": ("dress", "Illustration of a button-up shirt, clean sneaker and heels"),
-    "miami/yacht-party": ("yacht", "Illustration of a party yacht on the water at night"),
+    "miami/yacht-party": ("photo:yacht", "The Supreme party yacht in a Miami marina"),
     "miami/hip-hop-club-crawl": ("miami", "Illustration of a South Beach street at night with palm trees"),
-    "miami/bachelorette-party": ("yacht", "Illustration of a party yacht on the water at night"),
+    "miami/bachelorette-party": ("photo:yacht", "The Supreme party yacht in a Miami marina"),
 }
+
+def art_src(name):
+    if name.startswith("photo:"):
+        n = name.split(":", 1)[1]
+        return f"/assets/media/{n}-hero.jpg", f"{DOMAIN}/assets/media/{n}-og.jpg"
+    return f"/assets/art/{name}.svg", f"{DOMAIN}/assets/art/og/{name}.png"
 
 def art_figure(slug):
     name, alt = ART[slug]
-    return (f'<!--art--><figure class="hero-art"><img src="/assets/art/{name}.svg" alt="{alt}" '
+    src, _ = art_src(name)
+    return (f'<!--art--><figure class="hero-art"><img src="{src}" alt="{alt}" '
             f'width="1200" height="520" decoding="async" fetchpriority="high"></figure><!--/art-->')
 
 def og_tags(slug):
     name, alt = ART[slug]
-    return (f'<!--og--><meta property="og:image" content="{DOMAIN}/assets/art/og/{name}.png">'
+    _, og = art_src(name)
+    return (f'<!--og--><meta property="og:image" content="{og}">'
             f'<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">'
-            f'<meta property="og:image:alt" content="{alt}"><meta name="twitter:image" content="{DOMAIN}/assets/art/og/{name}.png"><!--/og-->')
+            f'<meta property="og:image:alt" content="{alt}"><meta name="twitter:image" content="{og}"><!--/og-->')
+
+# Real Supreme clips: shown on these pages as a strip of looping, muted videos
+VIDEOS = [("bus-night", "Party bus, lights on"), ("bus-ladies", "Girls' night on the bus"), ("bus-crew", "The crew on the bus")]
+VIDEO_PAGES = {"", "miami", "las-vegas-club-crawl", "las-vegas-hip-hop-club-crawl", "las-vegas-bachelorette-party",
+               "las-vegas-bachelor-party", "las-vegas-birthday-party-bus", "las-vegas-party-bus-prices",
+               "miami/hip-hop-club-crawl", "miami/bachelorette-party"}
+PHOTOS = {"miami/yacht-party": [("yacht-deck", "Top deck of the Supreme party yacht, Miami")],
+          "miami/bachelorette-party": [("yacht-deck", "Top deck of the Supreme party yacht, Miami")]}
+
+def media_block(slug):
+    out = ""
+    if slug in VIDEO_PAGES:
+        cards = "".join(
+            f'<figure class="clip"><video muted loop playsinline preload="none" poster="/assets/media/{v}.jpg" '
+            f'data-src="/assets/media/{v}.mp4" aria-label="{c}"></video><figcaption>{c}</figcaption></figure>'
+            for v, c in VIDEOS)
+        out += f'<section class="clips" aria-labelledby="clipsTitle"><h2 id="clipsTitle">Real nights on the bus</h2><div class="cliprow">{cards}</div></section>'
+    for img, alt in PHOTOS.get(slug, []):
+        out += f'<figure class="photo"><img src="/assets/media/{img}.jpg" alt="{alt}" loading="lazy" decoding="async"><figcaption>{alt}</figcaption></figure>'
+    return f"<!--media-->{out}<!--/media-->" if out else ""
 
 VEGAS_LINKS = [p for p in PAGES if p["city"] == "vegas"]
 MIAMI_LINKS = [p for p in PAGES if p["city"] == "miami"]
@@ -459,6 +487,8 @@ def page_html(p):
     {sections}
   </section>
 
+  {media_block(p["slug"])}
+
 {DRESS}
 
   <section class="content faq" aria-labelledby="faqTitle">
@@ -500,6 +530,11 @@ for p in PAGES:
 def patch_main(path, pages, heading, slug):
     s = path.read_text()
     fig, og = art_figure(slug), og_tags(slug)
+    media = media_block(slug)
+    if "<!--media-->" in s:
+        s = re.sub(r"<!--media-->.*?<!--/media-->", media, s, flags=re.S)
+    elif media:
+        s = s.replace('  <section class="dress"', "  " + media + "\n\n  <section class=\"dress\"", 1)
     if "<!--art-->" in s:
         s = re.sub(r"<!--art-->.*?<!--/art-->", fig, s, flags=re.S)
     else:
