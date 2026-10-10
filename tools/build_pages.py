@@ -323,6 +323,34 @@ PAGES = [
   ]),
 ]
 
+ART = {  # page slug -> (illustration, alt text)
+    "": ("party-bus", "Illustration of a party bus on the Las Vegas Strip at night"),
+    "miami": ("miami", "Illustration of a South Beach street at night with palm trees"),
+    "las-vegas-club-crawl": ("club", "Illustration of a crowd dancing under nightclub lights"),
+    "las-vegas-hip-hop-club-crawl": ("club", "Illustration of a crowd dancing under nightclub lights"),
+    "las-vegas-pool-party-crawl": ("pool", "Illustration of a Las Vegas pool party with palm trees and floats"),
+    "las-vegas-bachelorette-party": ("celebrate", "Illustration of champagne, glasses and balloons"),
+    "las-vegas-bachelor-party": ("party-bus", "Illustration of a party bus on the Las Vegas Strip at night"),
+    "las-vegas-birthday-party-bus": ("celebrate", "Illustration of champagne, glasses and balloons"),
+    "las-vegas-strip-club-tour": ("party-bus", "Illustration of a party bus on the Las Vegas Strip at night"),
+    "las-vegas-party-bus-prices": ("party-bus", "Illustration of a party bus on the Las Vegas Strip at night"),
+    "las-vegas-nightclub-dress-code": ("dress", "Illustration of a button-up shirt, clean sneaker and heels"),
+    "miami/yacht-party": ("yacht", "Illustration of a party yacht on the water at night"),
+    "miami/hip-hop-club-crawl": ("miami", "Illustration of a South Beach street at night with palm trees"),
+    "miami/bachelorette-party": ("yacht", "Illustration of a party yacht on the water at night"),
+}
+
+def art_figure(slug):
+    name, alt = ART[slug]
+    return (f'<!--art--><figure class="hero-art"><img src="/assets/art/{name}.svg" alt="{alt}" '
+            f'width="1200" height="520" decoding="async" fetchpriority="high"></figure><!--/art-->')
+
+def og_tags(slug):
+    name, alt = ART[slug]
+    return (f'<!--og--><meta property="og:image" content="{DOMAIN}/assets/art/og/{name}.png">'
+            f'<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">'
+            f'<meta property="og:image:alt" content="{alt}"><meta name="twitter:image" content="{DOMAIN}/assets/art/og/{name}.png"><!--/og-->')
+
 VEGAS_LINKS = [p for p in PAGES if p["city"] == "vegas"]
 MIAMI_LINKS = [p for p in PAGES if p["city"] == "miami"]
 
@@ -394,7 +422,8 @@ def page_html(p):
 <meta property="og:title" content="{html.escape(p["title"])}">
 <meta property="og:description" content="{html.escape(p["desc"])}">
 <meta property="og:url" content="{url}">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
+{og_tags(p["slug"])}
 <meta name="theme-color" content="#1E1234">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -417,6 +446,7 @@ def page_html(p):
   <section class="hero">
     <h1 id="heroTitle">{html.escape(p["h1"])}</h1>
     <p id="heroSub">{inline(p["lead"])}</p>
+    {art_figure(p["slug"])}
   </section>
 
   <nav class="dates" id="dates" aria-label="Choose a night"></nav>
@@ -467,8 +497,17 @@ for p in PAGES:
     out.write_text(page_html(p))
 
 # ---------------------------------------------------------------- main pages: links + footer
-def patch_main(path, pages, heading):
+def patch_main(path, pages, heading, slug):
     s = path.read_text()
+    fig, og = art_figure(slug), og_tags(slug)
+    if "<!--art-->" in s:
+        s = re.sub(r"<!--art-->.*?<!--/art-->", fig, s, flags=re.S)
+    else:
+        s = re.sub(r'(<p id="heroSub">.*?</p>)', lambda m: m.group(1) + "\n    " + fig, s, count=1, flags=re.S)
+    if "<!--og-->" in s:
+        s = re.sub(r"<!--og-->.*?<!--/og-->", og, s, flags=re.S)
+    else:
+        s = s.replace('<meta name="twitter:card" content="summary">', '<meta name="twitter:card" content="summary_large_image">\n' + og, 1)
     block = f"<!--plan-->{link_grid(pages, heading)}<!--/plan-->"
     if "<!--plan-->" in s:
         s = re.sub(r"<!--plan-->.*?<!--/plan-->", block, s, flags=re.S)
@@ -480,8 +519,8 @@ def patch_main(path, pages, heading):
         s = s.replace('    <p id="syncNote"></p>', f"    {footer_links()}\n    <p id=\"syncNote\"></p>", 1)
     path.write_text(s)
 
-patch_main(ROOT / "index.html", VEGAS_LINKS, "Plan your Las Vegas night")
-patch_main(ROOT / "miami" / "index.html", MIAMI_LINKS, "Plan your Miami night")
+patch_main(ROOT / "index.html", VEGAS_LINKS, "Plan your Las Vegas night", "")
+patch_main(ROOT / "miami" / "index.html", MIAMI_LINKS, "Plan your Miami night", "miami")
 
 # ---------------------------------------------------------------- sitemap
 urls = [(f"{DOMAIN}/", "1.0"), (f"{DOMAIN}/miami/", "0.9")] + [(url_of(p), "0.8") for p in PAGES]
