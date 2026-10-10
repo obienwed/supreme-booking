@@ -302,7 +302,7 @@ PAGES = [
  dict(slug="miami/bachelorette-party", city="miami", tours="miami-hiphop-club,miami-yacht-club,miami-yacht",
   nav="Bachelorette",
   title="Miami Bachelorette Party: Yacht Party & Club Crawl",
-  desc="Plan a Miami bachelorette party with a yacht party, a South Beach club crawl, or both. Free drinks, no lines, no cover. From $50 a person, taxes and fees included.",
+  desc="Plan a Miami bachelorette party with a yacht party, a South Beach club crawl, or both. Free drinks, no lines, no cover. From $50 a person, all-in.",
   h1="Miami Bachelorette Party",
   lead="A yacht party, a South Beach club crawl, or both in one night. Free drinks, no lines, and one simple price per person. Text us to plan the bride's weekend.",
   body=[
@@ -376,7 +376,7 @@ def media_block(slug):
             for v, c in VIDEOS)
         out += f'<section class="clips" aria-labelledby="clipsTitle"><h2 id="clipsTitle">Real nights on the bus</h2><div class="cliprow">{cards}</div></section>'
     for img, alt in PHOTOS.get(slug, []):
-        out += f'<figure class="photo"><img src="/assets/media/{img}.jpg" alt="{alt}" loading="lazy" decoding="async"><figcaption>{alt}</figcaption></figure>'
+        out += f'<figure class="photo"><img src="/assets/media/{img}.jpg" alt="{alt}" width="1102" height="1200" loading="lazy" decoding="async"><figcaption>{alt}</figcaption></figure>'
     return f"<!--media-->{out}<!--/media-->" if out else ""
 
 VEGAS_LINKS = [p for p in PAGES if p["city"] == "vegas"]
@@ -409,6 +409,7 @@ def footer_links():
             f'<p class="footlinks"><b>Miami:</b> <a href="/miami/">Club crawl</a> · {m}</p><!--/footlinks-->')
 
 TOUR_PRICE = {"miami-yacht": 100, "miami-yacht-club": 100}
+GUIDE_SLUGS = {"las-vegas-nightclub-dress-code", "las-vegas-party-bus-prices"}
 
 def page_html(p):
     city = p["city"]
@@ -423,12 +424,19 @@ def page_html(p):
             {"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(crumbs)]},
         {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
             {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": plain(a)}} for q, a in p["faq"]]},
-        {"@context": "https://schema.org", "@type": "TouristTrip", "name": p["h1"], "description": p["desc"], "url": url,
+    ]
+    # guide pages are articles, not bookable trips
+    if p["slug"] in GUIDE_SLUGS:
+        ld.append({"@context": "https://schema.org", "@type": "Article", "headline": p["h1"], "description": p["desc"], "url": url,
+                   "dateModified": TODAY,
+                   "publisher": {"@type": "Organization", "name": "Supreme Club Tours", "url": "https://www.supremeclubtours.com"}})
+    else:
+        ld.append({"@context": "https://schema.org", "@type": "TouristTrip", "name": p["h1"], "description": p["desc"], "url": url,
          "touristType": "Nightlife",
          "provider": {"@type": "Organization", "name": "Supreme Club Tours", "url": "https://www.supremeclubtours.com", "telephone": "+1-" + PHONE},
-         "offers": [{"@type": "Offer", "price": str(TOUR_PRICE.get(t, 50)), "priceCurrency": "USD", "url": url}
-                    for t in p["tours"].split(",")][:1]},
-    ]
+         "offers": [{"@type": "Offer", "price": str(TOUR_PRICE.get(t, 50)), "priceCurrency": "USD", "url": url,
+                     "availability": "https://schema.org/InStock"}
+                    for t in p["tours"].split(",")][:1]})
     crumb_html = " / ".join(
         f'<a href="{u.replace(DOMAIN, "")}">{html.escape(n)}</a>' if i < len(crumbs) - 1 else f'<span>{html.escape(n)}</span>'
         for i, (n, u) in enumerate(crumbs))
