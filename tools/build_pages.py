@@ -457,7 +457,10 @@ def page_html(p):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Figtree:wght@400;500;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/style.css">
-''' + "".join(f'<script type="application/ld+json">{json.dumps(x)}</script>\n' for x in ld) + f'''</head>
+''' + "".join(f'<script type="application/ld+json">{json.dumps(x)}</script>\n' for x in ld) + f'''<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+</head>
 <body data-city="{city}" data-tours="{p["tours"]}">
 <header>
   <div class="wrap bar">
